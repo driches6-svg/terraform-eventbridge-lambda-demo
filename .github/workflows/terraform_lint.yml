@@ -49,10 +49,16 @@ jobs:
           terraform init -backend=false || true
 
       - name: Install terraform-docs
-        uses: terraform-docs/gh-actions@v1.2.0
-        with:
-          version: v0.17.0
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+            set -euo pipefail
+            VERSION=0.17.0
+            OS=$(uname | tr '[:upper:]' '[:lower:]')
+            ARCH=amd64
+            curl -sSL -o /tmp/terraform-docs.tar.gz \
+            https://github.com/terraform-docs/terraform-docs/releases/download/v${VERSION}/terraform-docs-v${VERSION}-${OS}-${ARCH}.tar.gz
+            tar -xzf /tmp/terraform-docs.tar.gz -C /tmp
+            sudo mv /tmp/terraform-docs /usr/local/bin/terraform-docs
+            terraform-docs --version
 
       - name: Run pre-commit (Terraform hooks)
         env:
