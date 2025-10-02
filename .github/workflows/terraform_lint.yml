@@ -1,0 +1,52 @@
+name: Terraform Lint
+
+on:
+  pull_request:
+    paths:
+      - "**/*.tf"
+      - ".pre-commit-config.yaml"
+      - ".tflint.hcl"
+  push:
+    branches: [ main ]
+    paths:
+      - "**/*.tf"
+      - ".pre-commit-config.yaml"
+      - ".tflint.hcl"
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.9.5
+
+      - name: Install pre-commit
+        run: |
+          python3 -m pip install --upgrade pip
+          pip install pre-commit
+
+      - name: Install TFLint
+        run: |
+          curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
+          tflint --version
+
+      - name: Init Terraform (safe)
+        run: |
+          set -e
+          terraform -version
+          # init fails if backend not configured in PRs sometimes; ignore errors
+          terraform init -backend=false || true
+
+      - name: Run pre-commit (Terraform hooks)
+        env:
+          SKIP: black,isort,ruff  # run only TF hooks in this job
+        run: pre-commit run --all-files
