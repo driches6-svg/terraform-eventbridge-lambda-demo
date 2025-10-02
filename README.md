@@ -35,7 +35,7 @@ This setup demonstrates **resilience, traceability, and modularity**, and provid
 
 ### Clone and Scaffold
 ```bash
-git clone git@github.com:<your-org>/terraform-eventbridge-lambda-demo.git
+git clone git@github.com:driches6-svg/terraform-eventbridge-lambda-demo.git
 cd terraform-eventbridge-lambda-demo
 ```
 
@@ -111,7 +111,7 @@ terraform-eventbridge-lambda-demo/
 
 ---
 
-## 📖 Talking Points (for interview/demo)
+## 📖 Talking Points
 - **Resilience:** Retry policy + DLQ (SQS) prevents event loss.
 - **Traceability:** Events carry correlation IDs, logs are JSON structured.
 - **Modularity:** Consumers defined via reusable Terraform module.
