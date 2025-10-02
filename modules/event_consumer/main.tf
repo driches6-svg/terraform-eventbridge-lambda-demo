@@ -14,7 +14,6 @@ resource "aws_cloudwatch_event_rule" "this" {
   event_pattern  = var.event_pattern
 }
 
-
 resource "aws_cloudwatch_event_target" "this" {
   rule           = aws_cloudwatch_event_rule.this.name
   event_bus_name = var.event_bus_name

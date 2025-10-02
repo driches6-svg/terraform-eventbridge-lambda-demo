@@ -29,11 +29,7 @@ jobs:
         with:
           terraform_version: 1.9.5
 
-      - name: Install terraform-docs
-        uses: terraform-docs/gh-actions@v1.2.0
-        with:
-          version: v0.17.0
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+
 
       - name: Install pre-commit
         run: |
@@ -51,6 +47,12 @@ jobs:
           terraform -version
           # init fails if backend not configured in PRs sometimes; ignore errors
           terraform init -backend=false || true
+
+      - name: Install terraform-docs
+        uses: terraform-docs/gh-actions@v1.2.0
+        with:
+          version: v0.17.0
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Run pre-commit (Terraform hooks)
         env:
